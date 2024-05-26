@@ -44,10 +44,10 @@ def execute_with_list(sql_str):
     return results
 
 
-def insert_data(sid, name, password, age, sex, more, face_encoding):
+def insert_data(sid, name, password, age, sex, more, face_encoding, image_path):
     return execute_with_bool(
-        "insert into user(sid,name,password,age,sex,more,face_encoding) values(%s,%s,%s,%s,%s,%s,%s)",
-        (sid, name, password, age, sex, more, face_encoding))
+        "insert into user(sid,name,password,age,sex,more,face_encoding,image_path) values(%s,%s,%s,%s,%s,%s,%s,%s)",
+        (sid, name, password, age, sex, more, face_encoding, image_path))
 
 
 def update_by_name(sid, name, password, age, sex, more, face_encoding):
@@ -84,7 +84,3 @@ def delete_by_name(sid):
 
 def search_count_warn(sid):
     return execute_with_list("select count(*) from warn where sid = " + sid)[0][0]
-
-
-def add_name_warn(name):
-    return execute_with_bool("insert into warn(name) values(%s)", name)
