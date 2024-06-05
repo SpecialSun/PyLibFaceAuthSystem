@@ -727,7 +727,7 @@ font-family: &quot;微软雅黑&quot;, Helvetica, Arial, sans-serif;</string>
                            <property name="styleSheet">
                             <string notr="true">color:black;
 border:none;
-font-size:20px;
+font-size:16px;
 font-weight:500;
 font-family: &quot;微软雅黑&quot;;
 height:35px;
@@ -736,7 +736,7 @@ text-align:right;
 </string>
                            </property>
                            <property name="text">
-                            <string>学号：</string>
+                            <string>学号检索：</string>
                            </property>
                           </widget>
                          </item>
@@ -823,7 +823,7 @@ background:#008deb;
    }</string>
                            </property>
                            <property name="text">
-                            <string>查询信息</string>
+                            <string>检索</string>
                            </property>
                           </widget>
                          </item>

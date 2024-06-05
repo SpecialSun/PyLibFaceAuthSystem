@@ -442,37 +442,66 @@ class WinMainUi(QMainWindow):
         table_widget.setRowCount(0)
         # 遍历所有的元组（即查询结果）
         self.traverse_list(table_widget)
+        # 检查是否有选中的行
+        if self.table_widget_student.selectedItems():
+            # 获取第一个选中项的行号
+            row = self.table_widget_student.selectedItems()[0].row()
+            # 遍历该行的所有列
+            row_data = []
+            for column in range(self.table_widget_student.columnCount()):
+                item = self.table_widget_student.item(row, column)
+                if item:
+                    row_data.append(item.text())
+                else:
+                    row_data.append('')
+            # 打印选中行的内容
+            table_id = row_data[0]
+            # 假设 table_id 方法根据名称查询并返回对应的行，这里应该根据实际需求调整方法名和逻辑
+            row = UserSqlUtil.search_by_name(table_id)
 
     def modify_button_clicked(self):
         # 获取 id_lineEdit 的内容
-        search_id = self.id_lineEdit.text()
-        if search_id == '':
-            return QMessageBox.information(self, "提示", "学号不能为空，请输入学号")
-        # 假设 search_by_name 方法根据名称查询并返回对应的行，这里应该根据实际需求调整方法名和逻辑
-        row = UserSqlUtil.search_by_name(search_id)
-        if row:
-            result = row[0]
-            self.sid = result[0]
-            self.name = result[1]
-            self.password = result[2]
-            self.age = result[3]
-            self.sex = result[4]
-            self.more = result[5]
-            self.change_id_lineEdit.setText("")
-            self.name_lineEdit.setText("")
-            self.passsword_lineEdit.setText("")
-            self.age_lineEdit.setText("")
-            self.sex_lineEdit.setText("")
-            self.more_lineEdit.setText("")
-            self.change_id_lineEdit.setPlaceholderText(str(self.sid))
-            self.name_lineEdit.setPlaceholderText(str(self.name))
-            self.passsword_lineEdit.setPlaceholderText(str(self.password))
-            self.age_lineEdit.setPlaceholderText(str(self.age))
-            self.sex_lineEdit.setPlaceholderText(str(self.sex))
-            self.more_lineEdit.setPlaceholderText(str(self.more))
-            self.isSearch_flag = 1
+        # 检查是否有选中的行
+        if self.table_widget_student.selectedItems():
+            # 获取第一个选中项的行号
+            row = self.table_widget_student.selectedItems()[0].row()
+            # 遍历该行的所有列
+            row_data = []
+            for column in range(self.table_widget_student.columnCount()):
+                item = self.table_widget_student.item(row, column)
+                if item:
+                    row_data.append(item.text())
+                else:
+                    row_data.append('')
+            # 打印选中行的内容
+            table_id = row_data[0]
+            # 假设 table_id 方法根据名称查询并返回对应的行，这里应该根据实际需求调整方法名和逻辑
+            row = UserSqlUtil.search_by_name(table_id)
+            if row:
+                result = row[0]
+                self.sid = result[0]
+                self.name = result[1]
+                self.password = result[2]
+                self.age = result[3]
+                self.sex = result[4]
+                self.more = result[5]
+                self.change_id_lineEdit.setText("")
+                self.name_lineEdit.setText("")
+                self.passsword_lineEdit.setText("")
+                self.age_lineEdit.setText("")
+                self.sex_lineEdit.setText("")
+                self.more_lineEdit.setText("")
+                self.change_id_lineEdit.setPlaceholderText(str(self.sid))
+                self.name_lineEdit.setPlaceholderText(str(self.name))
+                self.passsword_lineEdit.setPlaceholderText(str(self.password))
+                self.age_lineEdit.setPlaceholderText(str(self.age))
+                self.sex_lineEdit.setPlaceholderText(str(self.sex))
+                self.more_lineEdit.setPlaceholderText(str(self.more))
+                self.isSearch_flag = 1
+            else:
+                QMessageBox.about(self, '提示', '找不到' + table_id + '的信息')
         else:
-            QMessageBox.about(self, '提示', '找不到' + search_id + '的信息')
+            QMessageBox.information(self, "提示", "请先选择表格中的一行")
 
     def confirm_button_clicked(self):
         if self.isSearch_flag == 1:
@@ -513,7 +542,7 @@ class WinMainUi(QMainWindow):
             else:
                 QMessageBox.about(self, '提示', '请先修改信息')
         else:
-            QMessageBox.about(self, '提示', '请先输入正确的学号，单击修改数据按钮后再修改数据！')
+            QMessageBox.about(self, '提示', '请选中需要修改的用户，单击修改数据按钮后再修改数据！')
 
     def view_photo(self):
         if self.table_widget_student.selectedItems():
@@ -726,13 +755,12 @@ class ImgUi(QDialog):
                 face_features = self.extract_face_features(frame)
                 if face_features is not None:
                     self.numpy_features = self.convert_features_to_array(face_features)
-                    # 显示信息
-                    QMessageBox.information(self, "提示", "检测到人脸!")
-
                     pixmap = QPixmap(file_name)
                     self.image_label.setPixmap(pixmap.scaled(self.image_label.size(), Qt.KeepAspectRatio))
                     self.isPhoto = 1
                     self.img_name = file_name
+                    # 显示信息
+                    QMessageBox.information(self, "提示", "检测到人脸!")
                 else:
                     self.isPhoto = 0
                     QMessageBox.information(self, "提示", "没有检测到人脸！")
